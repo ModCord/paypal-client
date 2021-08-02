@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/ModCord/paypal-client#readme",
   "dependencies": {
+    "@modcord/collection": "^1.0.2",
     "hclientify": "^1.0.5"
   },
   "devDependencies": {
