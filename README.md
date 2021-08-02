@@ -21,3 +21,19 @@ plan.update({
   }
 });
 ```
+
+# Creating a product
+Creating a plan, all of the template methods are shown below.
+
+```js
+const newProduct = new ProductTemplate()
+  .setName("My New Product")
+  .setDescription("A description for my new product.")
+  .setType("DIGITAL")
+  .setCategory("SOFTWARE")
+  .setId("MY-VERY-OWN-ID")
+  .setImageUrl("https://image.shutterstock.com/image-vector/new-item-sign-stamp-on-600w-1773071672.jpg")
+  .setHomeUrl("https://google.com");
+
+const myNewProduct = await paypalClient.products.create(newProduct);
+```
