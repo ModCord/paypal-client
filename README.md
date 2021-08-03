@@ -39,6 +39,108 @@ paypal.identify();
 - All of the examples below assume you set up the library the way it is shwon above, if you did it in another way you will need to tweak the examples for your own use case.
 - The examples below show the full list of parameters you can use to call a method or do a specific thing, when the comment next to it says is optional, you may ommit to include that in your code.
 
+# 1. Catalog Products API
+## 1.1 Products
+### 1.1.1 Creating a product
+
+```js
+const { ProductTemplate } = require("@modcord/modcord-client");
+...
+paypal.on("ready", async () => {
+  const newProduct = new ProductTemplate()
+    .setName("My New Product")
+    .setDescription("A description for my new product.")
+    .setType("DIGITAL")
+    .setCategory("SOFTWARE")
+    .setId("MY-VERY-OWN-ID")
+    .setImageUrl("https://image.shutterstock.com/image-vector/new-item-sign-stamp-on-600w-1773071672.jpg")
+    .setHomeUrl("https://google.com");
+
+  const myNewProduct = await paypalClient.products.create(newProduct);
+
+  console.log(myNewPorduct);
+  // Sample Output:
+  //  Product {
+  //  client: [Client],
+  //  manager: [ProductManager],
+  //  id: 'MY-VERY-OWN-ID',
+  //  name: 'My New Product',
+  //  description: 'A description for my new product.',
+  //  type: 'DIGITAL',
+  //  category: 'SOFTWARE',
+  //  imageUrl: 'https://image.shutterstock.com/image-vector/new-item-sign-stamp-on-600w-1773071672.jpg',
+  //  homeUrl: 'https://google.com/',
+  //  createTime: 2021-08-02T22:25:24.000Z,
+  //  updateTime: 2021-08-02T22:25:24.000Z
+});
+```
+
+### 1.1.2 Fetching products in bulk
+
+```js
+paypal.on("ready", async () => {
+  const myProducts = await paypal.products.fetchBulk({
+    page_count: 1, // Optional, maximum amount of pages to fetch, the amount of products returned = 20 * page_count. 
+    all: false // Optional, whether to fetch all of the existing products.
+  });
+
+  console.log(myProducts);
+  // Sample Output: Collection(2) [Map] {
+  //   'PROD-6BF74421N29171330' => Product {
+  //     client: [Client],
+  //     manager: ProductManager { client: [Client], cache: [Collection [Map]] },
+  //     id: 'PROD-6BF74421N29171330',
+  //     name: 'ModCord Plus',
+  //     description: 'Discord bot plus plan service.',
+  //     type: 'SERVICE',
+  //     category: 'SOFTWARE',
+  //     imageUrl: 'https://cdn.discordapp.com/avatars/624617804611452929/4a76c4f5dbf105691f47f0cac3d5756a.png?size=256',
+  //     homeUrl: 'https://modcord.xyz/',
+  //     createTime: 2021-03-24T07:35:39.000Z,
+  //     updateTime: 2021-03-24T07:35:39.000Z
+  //   },
+  //   'PROD-98551998BW8384520' => Product {
+  //     client:[Client],
+  //     manager: ProductManager { client: [Client], cache: [Collection [Map]] },
+  //     id: 'PROD-98551998BW8384520',
+  //     name: 'ModCord',
+  //     description: 'Discord bot royalty services.',
+  //     type: 'SERVICE',
+  //     category: 'SOFTWARE',
+  //     imageUrl: 'https://cdn.discordapp.com/avatars/624617804611452929/4a76c4f5dbf105691f47f0cac3d5756a.png?size=256',
+  //     homeUrl: 'https://modcord.xyz/',
+  //     createTime: 2021-03-24T07:56:01.000Z,
+  //     updateTime: 2021-03-24T07:56:01.000Z
+  //   }
+});
+```
+
+### 1.1.3 Fetching product by id
+
+```js
+paypal.on("ready", async () => {
+  const myProduct = await paypal.products.fetch(
+    "PROD-6BF74421N29171330",
+    false
+  );
+
+  console.log(myProduct);
+  // Sample: Product {
+  //   client: [Client],
+  //   manager: [ProductManager]
+  //   id: 'PROD-6BF74421N29171330',
+  //   name: 'ModCord Plus',
+  //   description: 'Discord bot plus plan service.',
+  //   type: 'SERVICE',
+  //   category: 'SOFTWARE',
+  //   imageUrl: 'https://cdn.discordapp.com/avatars/624617804611452929/4a76c4f5dbf105691f47f0cac3d5756a.png?size=256',
+  //   homeUrl: 'https://modcord.xyz/',
+  //   createTime: 2021-03-24T07:35:39.000Z,
+  //   updateTime: 2021-03-24T07:35:39.000Z
+}
+});
+```
+
 # 2. Subscriptions API
 ## 2.1 Plans
 ### 2.1.1 Fetching plans in bulk
@@ -50,8 +152,7 @@ paypal.on("ready", async () => {
     all: false // Optional, whether to fetch all of the existing plans.
   });
 
-  console.log(myPlans;)
-  
+  console.log(myPlans);
   // Sample Output: 
   //   Collection(2) [Map] {
   //     'P-12T40581WT129034PMBNO4EI' => Plan {
@@ -157,6 +258,8 @@ paypal.on("ready", async () => {
 
 ### 2.1.3 Activating a plan
 - You can activate plans with statuses `CREATED` and `INACTIVE`
+- You can apply this method on every plan instance.
+
 ```js
 paypal.on("ready", async () => {
   const plan = await paypal.plans.fetch(
@@ -237,24 +340,3 @@ paypal.on("ready", async () => {
   //  }
 });
 ```
-
-# Creating a product
-Creating a plan, all of the template methods are shown below.
-
-```js
-const newProduct = new ProductTemplate()
-  .setName("My New Product")
-  .setDescription("A description for my new product.")
-  .setType("DIGITAL")
-  .setCategory("SOFTWARE")
-  .setId("MY-VERY-OWN-ID")
-  .setImageUrl("https://image.shutterstock.com/image-vector/new-item-sign-stamp-on-600w-1773071672.jpg")
-  .setHomeUrl("https://google.com");
-
-const myNewProduct = await paypalClient.products.create(newProduct);
-```
-
-# Catalog Products API
-The coverage for this interface in the library is 100%, see more details at [https://developer.paypal.com/docs/api/catalog-products/v1/](https://developer.paypal.com/docs/api/catalog-products/v1/).
-
-## 
