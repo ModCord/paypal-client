@@ -39,9 +39,9 @@ paypal.identify();
 - All of the examples below assume you set up the library the way it is shwon above, if you did it in another way you will need to tweak the examples for your own use case.
 - The examples below show the full list of parameters you can use to call a method or do a specific thing, when the comment next to it says is optional, you may ommit to include that in your code.
 
-# 1. Subscriptions API
-## 1.1 Plans
-### 1.1.1 Fetching plans in bulk
+# 2. Subscriptions API
+## 2.1 Plans
+### 2.1.1 Fetching plans in bulk
 ```js
 paypal.on("ready", async () => {
   const myPlans = await paypal.plans.fetchBulk({
@@ -100,7 +100,7 @@ paypal.on("ready", async () => {
 });
 ```
 
-### 1.1.2 Fetching plans by id
+### 2.1.2 Fetching plans by id
 ```js
 paypal.on("ready", async () => {
   const plan = await paypal.plans.fetch(
@@ -135,7 +135,7 @@ paypal.on("ready", async () => {
 });
 ``` 
 
-### 1.1.3 Deactivating a plan
+### 2.1.3 Deactivating a plan
 - You can apply this method on every plan instance.
 
 ```js
@@ -155,24 +155,86 @@ paypal.on("ready", async () => {
   // Output: INACTIVE
 ```
 
-# Updating a plan
+### 2.1.3 Activating a plan
+- You can activate plans with statuses `CREATED` and `INACTIVE`
+```js
+paypal.on("ready", async () => {
+  const plan = await paypal.plans.fetch(
+    "P-5D525680HN2867820MBNPCQI", // Required, the plan id you want to fetch. 
+    false //  Optional, Whether to bypass the existing cache if paypal.keep_chache is enabled and make a request.
+  );
+
+  console.log(plan.status);
+  // Output: INACTIVE or CREATED
+
+  const operationResult = await plan.activate(); 
+  console.log(operationResult); // true if success, false if failed
+
+  console.log(plan.status);
+  // Output: ACTIVE
+```
+
+### 3.1.4 Updating a plan
 Fetching multiple plans.
 
 ```js
-plan.update({
-  paymentPreferences: {
+paypal.on("ready", async () => {
+  const plan = await paypal.plans.fetch(
+    "P-5D525680HN2867820MBNPCQI", // Required, the plan id you want to fetch. 
+    false //  Optional, Whether to bypass the existing cache if paypal.keep_chache is enabled and make a request.
+  );
+
+  console.log(plan.description);
+  // Output: Old and boring description.
+
+  console.log(plan.taxes.percentage);
+  // Output: 0.7
+
+  console.log(plan.paymentPreferences);
+  // Output: PaymentPreferences {
+  //    serviceType: 'PREPAID',
+  //    autoBillOutstanding: true,
+  //    setupFee: {
+  //      currencyCode: "USD",
+  //      value: 3.52
+  //    },
+  //    setupFeeFailureAction: 'CONTINUE',
+  //    paymentFailureThreshold: 2
+  //  }
+
+  await plan.update({
     description: "The shiny new description!",
     taxes: {
       percentage: 10.5
     },
-    autoBillOutstanding: true,
-    paymentFailureThreshold: 4,
-    setupFee: {
-      currencyCode: "USD",
-      value: 4.69
-    },
-    setupFeeFailureAction: "CANCEL"
-  }
+    paymentPreferences: {
+      autoBillOutstanding: false,
+      paymentFailureThreshold: 4,
+      setupFee: {
+        currencyCode: "USD",
+        value: 4.69
+      },
+      setupFeeFailureAction: "CANCEL"
+    }
+  });
+
+  console.log(plan.description);
+  // Output: The shiny new description!
+
+  console.log(plan.taxes.percentage);
+  // Output: 10.5
+
+  console.log(plan.paymentPreferences);
+  // Output: PaymentPreferences {
+  //    serviceType: 'PREPAID',
+  //    autoBillOutstanding: false,
+  //    setupFee: {
+  //      currencyCode: "USD",
+  //      value: 4.69
+  //    },
+  //    setupFeeFailureAction: 'CANCEL',
+  //    paymentFailureThreshold: 4
+  //  }
 });
 ```
 
