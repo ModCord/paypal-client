@@ -61,17 +61,18 @@ paypal.on("ready", async () => {
   console.log(myNewPorduct);
   // Sample Output:
   //  Product {
-  //  client: [Client],
-  //  manager: [ProductManager],
-  //  id: 'MY-VERY-OWN-ID',
-  //  name: 'My New Product',
-  //  description: 'A description for my new product.',
-  //  type: 'DIGITAL',
-  //  category: 'SOFTWARE',
-  //  imageUrl: 'https://image.shutterstock.com/image-vector/new-item-sign-stamp-on-600w-1773071672.jpg',
-  //  homeUrl: 'https://google.com/',
-  //  createTime: 2021-08-02T22:25:24.000Z,
-  //  updateTime: 2021-08-02T22:25:24.000Z
+  //    client: [Client],
+  //    manager: [ProductManager],
+  //    id: 'MY-VERY-OWN-ID',
+  //    name: 'My New Product',
+  //    description: 'A description for my new product.',
+  //    type: 'DIGITAL',
+  //    category: 'SOFTWARE',
+  //    imageUrl: 'https://image.shutterstock.com/image-vector/new-item-sign-stamp-on-600w-1773071672.jpg',
+  //    homeUrl: 'https://google.com/',
+  //    createTime: 2021-08-02T22:25:24.000Z,
+  //    updateTime: 2021-08-02T22:25:24.000Z
+  //  }
 });
 ```
 
@@ -112,6 +113,7 @@ paypal.on("ready", async () => {
   //     createTime: 2021-03-24T07:56:01.000Z,
   //     updateTime: 2021-03-24T07:56:01.000Z
   //   }
+  // }
 });
 ```
 
@@ -137,6 +139,7 @@ paypal.on("ready", async () => {
   //   homeUrl: 'https://modcord.xyz/',
   //   createTime: 2021-03-24T07:35:39.000Z,
   //   updateTime: 2021-03-24T07:35:39.000Z
+  // }
 }
 });
 ```
