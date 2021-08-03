@@ -144,6 +144,53 @@ paypal.on("ready", async () => {
 });
 ```
 
+### 1.1.4 Updating a product
+- This method can be applied to any product instance.
+
+```js
+paypal.on("ready", async () => {
+    const myProduct = await paypal.products.fetch(
+    "PROD-6BF74421N29171330",
+    false
+  );
+
+  console.log(myProduct.name);
+  // Output: ModCord Plus
+
+  console.log(myProduct.description);
+  // Output: Discord bot plus plan service.
+
+  console.log(myProduct.imageUrl);
+  // Output: https://cdn.discordapp.com/avatars/624617804611452929/4a76c4f5dbf105691f47f0cac3d5756a.png?size=256
+
+  console.log(myProduct.homeUrl);
+  // Output: https://modcord.xyz/
+
+  const operationResult = await myProduct.update({
+    name: "ModCord Pro",
+    description: "The re-branded pro plan.",
+    imageUrl: "https://image.shutterstock.com/image-vector/new-item-sign-stamp-on-600w-1773071672.jpg",
+    homeUrl: "https://modcord.com"
+  });
+
+  console.log(operationResult);
+  // Output: true if success
+  // Output: the http json or false if failed 
+
+  console.log(myProduct.name);
+  // Output: ModCord Pro
+
+  console.log(myProduct.description);
+  // Output: The re-branded pro plan.
+
+  console.log(myProduct.imageUrl);
+  // Output: https://image.shutterstock.com/image-vector/new-item-sign-stamp-on-600w-1773071672.jpg
+
+  console.log(myProduct.homeUrl);
+  // Output: https://modcord.com
+});
+```
+
 # 2. Subscriptions API
 ## 2.1 Plans
 ### 2.1.1 Fetching plans in bulk
@@ -308,7 +355,7 @@ paypal.on("ready", async () => {
   //    paymentFailureThreshold: 2
   //  }
 
-  await plan.update({
+  const operationResult = await plan.update({
     description: "The shiny new description!",
     taxes: {
       percentage: 10.5
@@ -323,6 +370,10 @@ paypal.on("ready", async () => {
       setupFeeFailureAction: "CANCEL"
     }
   });
+
+  console.log(operationResult);
+  // Output: true if success
+  // Output: the http json or false if failed 
 
   console.log(plan.description);
   // Output: The shiny new description!
