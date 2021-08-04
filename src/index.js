@@ -20,5 +20,8 @@ module.exports = {
   // Utils
   planStatusUtil: require("../lib/utils/planStatuses"),
   productTypeUtil: require("../lib/utils/productTypes"),
-  currencyCodesUtil: require("../lib/utils/currencyCodes") 
+  currencyCodesUtil: require("../lib/utils/currencyCodes"),
+
+  // Client
+  Client: require("../lib/Client")
 };

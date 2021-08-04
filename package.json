@@ -1,6 +1,6 @@
 {
   "name": "@modcord/paypal-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A PayPal client designed to interract with the PayPal API.",
   "main": "src/index.js",
   "scripts": {
