@@ -394,3 +394,46 @@ paypal.on("ready", async () => {
   //  }
 });
 ```
+
+### 3.1.5 Creating a plan
+
+```js
+paypal.on("ready", async () => {
+  const myNewPlan = new PlanTemplate()
+    .setProductId(myProduct.id) // Required, the product id of this plan.
+    .setName("My Nice Plan") // Required, the name for this plan.
+    .setDescription("A very nice plan to create.") // Optional, the description for this plan.
+    .setStatus("ACTIVE") // Optional, the status for this plan - by default the status is "CREATED" - can be "CREATED" or "ACTIVE".
+    .setPaymentPreferences({ // Optional, the payment preferences.
+      autoBillOutstanding: true, // Whether to bill outstanding balances automatically.
+      setupFailureAction: "CANCEL", // What to do when the setup billing fails: "CONTINUE" or "CANCEL".
+      paymentFailureThreshold: 3, // The threshold for billing failures until the setupFailureAction is triggered.
+      setupFee: { // The setup fee.
+        currencyCode: "USD", // The currency code.
+        value: 2.44 // The value, amount of currency code.
+      }
+    })
+    .setTaxes(20, true) // 20% taxes that have been included in the plan's price
+    .addBillingCycle({ // All of the subscriptions must have 1 billing cycle.
+      fixedPrice: { // The price for this cycle.
+        currencyCode: "USD", // The currency for this price.
+        value: 0 // The value for this price.
+      },
+      pricingModel: "VOLUME" // The pricing model, can be TIERED or VOLUME: TIERED also reauires you to provide a tiers array to the pricing scheme.
+    }, {
+      intervalUnit: "WEEK", // How often this billing cycle is billing.
+      intervalCount: 2 // The amount of units: for instance this billing cycle will last 2 weeks.
+    }, "TRIAL", 1, 1) // The type for this billing cycle is trial, with a sequence of 1: it'll be executed first when subscribed to; and totalCycles of 1: it'll repeat once - for 2 weeks.
+    .addBillingCycle({
+      fixedPrice: { // The price for this cycle.
+        currencyCode: "USD", // The currency.
+        value: 4.99 // The value.
+      },
+      pricingModel: "VOLUME" // Pricing mode - VOLUME or TIERED: TIERED also requires you to provide a tiers array.
+    }, {
+      intervalUnit: "MONTH", // The interval unit for this cycle.
+      intervalCount: 1 // The intercal unit count for this cycle - this will bill every 1 month after subscribing.
+    }, "REGULAR", 2, 0) // The type for this billing cycle is "REGULAR", the sequence is 2 so it comes after the trial defined before, and totalCycles: 0 - it'll repeat until the user unsubscribes.
+    .setQuantitySupported(false); // Whether the user can input a quentity when checking out subscription, set to false.
+});
+```
