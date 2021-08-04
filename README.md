@@ -399,6 +399,11 @@ paypal.on("ready", async () => {
 
 ```js
 paypal.on("ready", async () => {
+  const myProduct = await paypal.products.fetch(
+    "PROD-6BF74421N29171330", // The product id to fetch.
+    true // Whether to bypass the cache.
+  );
+
   const myNewPlan = new PlanTemplate()
     .setProductId(myProduct.id) // Required, the product id of this plan.
     .setName("My Nice Plan") // Required, the name for this plan.
@@ -435,5 +440,47 @@ paypal.on("ready", async () => {
       intervalCount: 1 // The intercal unit count for this cycle - this will bill every 1 month after subscribing.
     }, "REGULAR", 2, 0) // The type for this billing cycle is "REGULAR", the sequence is 2 so it comes after the trial defined before, and totalCycles: 0 - it'll repeat until the user unsubscribes.
     .setQuantitySupported(false); // Whether the user can input a quentity when checking out subscription, set to false.
+  
+  const myPlan = await paypal.plans.create(myNewPlan);
+  console.log(myPlan);
+  // Sample output:
+  // Plan {
+  //   client: [Client],
+  //   id: 'P-6ML94041PT1662406MEFJZJQ',
+  //   version: undefined,
+  //   name: 'My Nice Plan',
+  //   description: 'A very nice plan to create.',
+  //   status: 'ACTIVE',
+  //   usage_type: 'LICENSED',
+  //   billingCycles: [
+  //     BillingCycle {
+  //       plan: [Circular *2],
+  //       pricingScheme: [PricingScheme],
+  //       frequency: [Frequency],
+  //       tenureType: 'TRIAL',
+  //       sequence: 1,
+  //       totalCycles: 1
+  //     },
+  //     BillingCycle {
+  //       plan: [Circular *2],
+  //       pricingScheme: [PricingScheme],
+  //       frequency: [Frequency],
+  //       tenureType: 'REGULAR',
+  //       sequence: 2,
+  //       totalCycles: 0
+  //     }
+  //   ],
+  //   paymentPreferences: PaymentPreferences {
+  //     serviceType: 'PREPAID',
+  //     autoBillOutstanding: true,
+  //     setupFee: Price { currencyCode: 'USD', value: '2.44' },
+  //     setupFeeFailureAction: 'CANCEL',
+  //     paymentFailureThreshold: 3
+  //   },
+  //   taxes: null,
+  //   payee: null,
+  //   createTime: 2021-08-04T13:56:54.000Z,
+  //   updateTime: 2021-08-04T13:56:54.000Z
+  // }
 });
 ```
